@@ -2,7 +2,7 @@
 'use strict';
 
 
-var Naive = { };
+var Naive = {};
 
 exports.Naive = Naive;
 /* No side effect */

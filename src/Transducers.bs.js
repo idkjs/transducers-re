@@ -22,22 +22,22 @@ function transduce(xform, f, init, coll) {
 }
 
 function compose(f, g) {
-  return (function (x) {
-      return Curry._1(f, Curry._1(g, x));
-    });
+  return function (x) {
+    return Curry._1(f, Curry._1(g, x));
+  };
 }
 
 function $great$great$great(g, f) {
-  return (function (x) {
-      return Curry._1(f, Curry._1(g, x));
-    });
+  return function (x) {
+    return Curry._1(f, Curry._1(g, x));
+  };
 }
 
 function conj(xs, x) {
-  return Pervasives.$at(xs, /* :: */[
-              x,
-              /* [] */0
-            ]);
+  return Pervasives.$at(xs, {
+              hd: x,
+              tl: /* [] */0
+            });
 }
 
 function xlist(xform, initOpt, coll) {
@@ -71,19 +71,19 @@ function filter_numbers(x) {
   return x !== undefined;
 }
 
-var maybe_numbers = /* :: */[
-  1,
-  /* :: */[
-    undefined,
-    /* :: */[
-      2,
-      /* :: */[
-        undefined,
-        /* [] */0
-      ]
-    ]
-  ]
-];
+var maybe_numbers = {
+  hd: 1,
+  tl: {
+    hd: undefined,
+    tl: {
+      hd: 2,
+      tl: {
+        hd: undefined,
+        tl: /* [] */0
+      }
+    }
+  }
+};
 
 function f(param, param$1, param$2) {
   return Curry._2(param, param$1, param$2 !== undefined ? param$2 : 0);
@@ -94,14 +94,14 @@ function g(param, param$1, param$2) {
 }
 
 function xf(x) {
-  return (function (param, param$1) {
-      var param$2 = function (param$3, param$4) {
-        return f((function (param, param$1) {
-                      return g(x, param, param$1);
-                    }), param$3, param$4);
-      };
-      return xfilter(filter_numbers, param$2, param, param$1);
-    });
+  return function (param, param$1) {
+    var param$2 = function (param$3, param$4) {
+      return f((function (param, param$1) {
+                    return g(x, param, param$1);
+                  }), param$3, param$4);
+    };
+    return xfilter(filter_numbers, param$2, param, param$1);
+  };
 }
 
 var only_incremented_numbers = xlist(xf, undefined, maybe_numbers);

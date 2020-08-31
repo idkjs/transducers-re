@@ -12,38 +12,38 @@ console.log("======================================");
 console.log("First example, hard-coded using lists:");
 
 function countAdultsWithInitial(initial, people) {
-  return List.length(List.filter((function (person) {
-                      return person.age >= 18;
-                    }))(List.filter((function (person) {
-                          return Caml_string.get(person.name, 0) === initial;
-                        }))(people)));
+  return List.length(List.filter(function (person) {
+                    return person.age >= 18;
+                  })(List.filter(function (person) {
+                        return Caml_string.get(person.name, 0) === initial;
+                      })(people)));
 }
 
-var people = /* :: */[
-  {
+var people = {
+  hd: {
     age: 16,
     name: "Alice"
   },
-  /* :: */[
-    {
+  tl: {
+    hd: {
       age: 25,
       name: "Andrew"
     },
-    /* :: */[
-      {
+    tl: {
+      hd: {
         age: 34,
         name: "Ann"
       },
-      /* :: */[
-        {
+      tl: {
+        hd: {
           age: 22,
           name: "Bob"
         },
-        /* [] */0
-      ]
-    ]
-  ]
-];
+        tl: /* [] */0
+      }
+    }
+  }
+};
 
 console.log(countAdultsWithInitial(/* "A" */65, people));
 
@@ -66,16 +66,16 @@ function countAdultsWithInitial$1(initial) {
                   return prim + prim$1 | 0;
                 }), param$1, param$2);
   };
-  return (function (param$1, param$2) {
-      var param$3 = function (param$4, param$5) {
-        return Transducer$TransducersRe.filter((function (person) {
-                      return person.age >= 18;
-                    }), param, param$4, param$5);
-      };
+  return function (param$1, param$2) {
+    var param$3 = function (param$4, param$5) {
       return Transducer$TransducersRe.filter((function (person) {
-                    return Caml_string.get(person.name, 0) === initial;
-                  }), param$3, param$1, param$2);
-    });
+                    return person.age >= 18;
+                  }), param, param$4, param$5);
+    };
+    return Transducer$TransducersRe.filter((function (person) {
+                  return Caml_string.get(person.name, 0) === initial;
+                }), param$3, param$1, param$2);
+  };
 }
 
 console.log(List.fold_left(countAdultsWithInitial$1(/* "A" */65), 0, people));
@@ -90,14 +90,14 @@ function adultsWithInitial(initial, combine) {
                   return person.age >= 18;
                 }), param, param$1, param$2);
   };
-  return (function (param, param$1) {
-      var param$2 = function (param$3, param$4) {
-        return g(combine, param$3, param$4);
-      };
-      return Transducer$TransducersRe.filter((function (person) {
-                    return Caml_string.get(person.name, 0) === initial;
-                  }), param$2, param, param$1);
-    });
+  return function (param, param$1) {
+    var param$2 = function (param$3, param$4) {
+      return g(combine, param$3, param$4);
+    };
+    return Transducer$TransducersRe.filter((function (person) {
+                  return Caml_string.get(person.name, 0) === initial;
+                }), param$2, param, param$1);
+  };
 }
 
 console.log("Counting the selected records:");
@@ -137,10 +137,10 @@ console.log(List.fold_left(enumerateAdultsWithInitial(/* "A" */65), "", people))
 console.log("Collecting the selected records into a list:");
 
 function append(list, element) {
-  return Pervasives.$at(list, /* :: */[
-              element,
-              /* [] */0
-            ]);
+  return Pervasives.$at(list, {
+              hd: element,
+              tl: /* [] */0
+            });
 }
 
 console.log(List.fold_left(adultsWithInitial(/* "A" */65, append), /* [] */0, people));
@@ -156,9 +156,9 @@ function reduce(reducer, _result, _tree) {
     if (!tree) {
       return result;
     }
-    var resultSelf = Curry._2(reducer, result, tree[0]);
-    var resultLeft = reduce(reducer, resultSelf, tree[1]);
-    _tree = tree[2];
+    var resultSelf = Curry._2(reducer, result, tree._0);
+    var resultLeft = reduce(reducer, resultSelf, tree._1);
+    _tree = tree._2;
     _result = resultLeft;
     continue ;
   };
@@ -168,35 +168,35 @@ var Tree = {
   reduce: reduce
 };
 
-var people$1 = /* Node */[
-  {
+var people$1 = /* Node */{
+  _0: {
     age: 34,
     name: "Ann"
   },
-  /* Node */[
-    {
+  _1: /* Node */{
+    _0: {
       age: 25,
       name: "Andrew"
     },
-    /* Node */[
-      {
+    _1: /* Node */{
+      _0: {
         age: 16,
         name: "Alice"
       },
-      /* Empty */0,
-      /* Empty */0
-    ],
-    /* Empty */0
-  ],
-  /* Node */[
-    {
+      _1: /* Empty */0,
+      _2: /* Empty */0
+    },
+    _2: /* Empty */0
+  },
+  _2: /* Node */{
+    _0: {
       age: 22,
       name: "Bob"
     },
-    /* Empty */0,
-    /* Empty */0
-  ]
-];
+    _1: /* Empty */0,
+    _2: /* Empty */0
+  }
+};
 
 console.log("Counting the selected records:");
 
