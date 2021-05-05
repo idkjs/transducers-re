@@ -136,3 +136,5 @@ Js.log("Collecting the selected records into a list:");
 people
 |> Tree.reduce(adultsWithInitial('A', append), [])
 |> Js.log
+
+
